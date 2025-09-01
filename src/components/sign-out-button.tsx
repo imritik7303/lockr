@@ -2,9 +2,9 @@
 
 import { useState } from "react";
 import { Button } from "./ui/button";
-import { useRouter } from "next/router";
 import { signOut } from "@/lib/auth-client";
 import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 export const SignOutButton = () => {
   const [isPending, setIsPending] = useState(false);
@@ -13,6 +13,12 @@ export const SignOutButton = () => {
   async function handleClick() {
     await signOut({
       fetchOptions: {
+        onRequest: () => {
+          setIsPending(true);
+        },
+        onResponse: () => {
+          setIsPending(false);
+        },
         onError: (ctx) => {
           toast.error(ctx.error.message);
         },
