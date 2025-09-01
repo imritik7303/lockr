@@ -1,4 +1,5 @@
-import { RegisterForm } from "@/components/register-form"
+import { LoginForm } from "@/components/login-form"
+
 
 export default function Login() {
   return (
@@ -7,7 +8,7 @@ export default function Login() {
         <div className="space-y-8">
             <h1 className="text-3xl font-bold">Login</h1>
         </div>
-        <RegisterForm/>
+        <LoginForm/>
     </div>
   )
 }
