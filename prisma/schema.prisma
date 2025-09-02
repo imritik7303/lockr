@@ -8,6 +8,11 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum UserRole {
+  USER
+  ADMIN
+}
+
 model Post {
   id        String   @id @default(uuid())
   createdAt DateTime @default(now())
@@ -17,25 +22,25 @@ model Post {
   content String
 
   userId String
- user User @relation(fields: [userId] , references: [id] , onDelete: Cascade)
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("posts")
 }
 
 model User {
-  id            String    @id @default(uuid())
-  createdAt     DateTime
-  updatedAt     DateTime
+  id        String   @id @default(uuid())
+  createdAt DateTime
+  updatedAt DateTime
 
   name          String
-  email         String @unique
+  email         String   @unique
   emailVerified Boolean
   image         String?
+  role          UserRole @default(USER)
 
-  sessions      Session[]
-  accounts      Account[]
-  post          Post[]
-
+  sessions Session[]
+  accounts Account[]
+  post     Post[]
 
   @@map("user")
 }
@@ -46,20 +51,20 @@ model Session {
   updatedAt DateTime
 
   expiresAt DateTime
-  token     String @unique
+  token     String   @unique
   ipAddress String?
   userAgent String?
 
-  userId    String
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("session")
 }
 
 model Account {
-  id                    String    @id @default(uuid())
-  createdAt             DateTime
-  updatedAt             DateTime
+  id        String   @id @default(uuid())
+  createdAt DateTime
+  updatedAt DateTime
 
   accountId             String
   providerId            String
@@ -71,22 +76,20 @@ model Account {
   scope                 String?
   password              String?
 
-  userId                String
-  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("account")
 }
 
 model Verification {
-  id         String    @id @default(uuid())
-  createdAt  DateTime?
-  updatedAt  DateTime?
+  id        String    @id @default(uuid())
+  createdAt DateTime?
+  updatedAt DateTime?
 
   identifier String
   value      String
   expiresAt  DateTime
-  
 
   @@map("verification")
 }
