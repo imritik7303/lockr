@@ -3,6 +3,7 @@ import { SignOutButton } from '@/components/sign-out-button'
 import { auth } from '@/lib/auth'
 
 import { headers } from 'next/headers'
+import { redirect } from 'next/navigation'
 import React from 'react'
 
 export default async function Profile() {
@@ -10,7 +11,7 @@ export default async function Profile() {
         headers:await headers()
     })
   if(!session) {
-    return <p className='text-destructive'>Unauthorized</p>
+    redirect("/auth/login")
   }  
   return (
     <div className="px-8 py-16 container

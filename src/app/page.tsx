@@ -1,7 +1,15 @@
+import GetStartedButton from '@/components/get-started-button'
 import React from 'react'
 
 export default function Page() {
   return (
-    <div>Page</div>
+    <div className='flex items-center justify-center h-dvh'>
+      <div className="flex justify-center gap-8 flex-col items-center">
+        <h1 className='text-6xl font-bold '>
+          lockR
+        </h1>
+        <GetStartedButton/>
+      </div>
+    </div>
   )
 }

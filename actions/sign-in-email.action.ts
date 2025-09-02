@@ -1,8 +1,10 @@
 "use server"
 
-import { auth } from "@/lib/auth";
+import { auth, ErrorCode } from "@/lib/auth";
+import { APIError } from "better-auth/api";
 
 import {headers } from "next/headers";
+import { redirect } from "next/navigation";
 
 export async function signInEmailAction(formData: FormData) {
  
@@ -24,8 +26,8 @@ export async function signInEmailAction(formData: FormData) {
 
     return { error: null };
   } catch (error) {
-    if (error instanceof Error) {
-      return { error: "Oops! something went wrong while logging in" };
+    if (error instanceof APIError) {
+          return { error: error.message };
     }
   }
 
