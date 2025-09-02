@@ -2,6 +2,8 @@
 import { Trash2Icon } from "lucide-react";
 import { Button } from "./ui/button";
 import { useState } from "react";
+import { deleteUserAction } from "../../actions/delete-user.action";
+import { toast } from "sonner";
 
 interface DeleteUserButtonProps {
     userId:string;
@@ -13,6 +15,14 @@ export const DeleteUserButton = ({userId}:DeleteUserButtonProps) => {
 
     async function handleClick() {
         setIsPending(true)
+
+        const {error} = await deleteUserAction({userId})
+
+        if(error){
+            toast.error(error);
+        }else{
+            toast.success("user deleted successfully!")
+        }
 
         setIsPending(false)
     }
