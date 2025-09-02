@@ -4,6 +4,7 @@ Lockr is a modern authentication system built with Better Auth and Next.js.
 It provides a clean, secure, and production-ready foundation for handling user authentication, sessions, and OAuth logins with minimal setup.
 
 ✨ Features
+
 ⚡ Better Auth integration (secure, modern auth flows)
 🔑 Email + Password authentication
 🌍 OAuth support (Google, GitHub, etc.)
