@@ -1,20 +1,65 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+🔐 Lockr
 
+Lockr is a modern authentication system built with Better Auth and Next.js.
+It provides a clean, secure, and production-ready foundation for handling user authentication, sessions, and OAuth logins with minimal setup.
+
+✨ Features
+⚡ Better Auth integration (secure, modern auth flows)
+🔑 Email + Password authentication
+🌍 OAuth support (Google, GitHub, etc.)
+🍪 Secure session management with cookies
+🛡️ Middleware-based route protection
+🔐 Configurable session expiration
+🧑‍💻 Developer-friendly APIs for signup, login, logout
+🛠️ Built with Next.js (App Router) + TypeScript
+
+📦 Bun support for faster installs & builds
 ## Getting Started
 
-First, run the development server:
+1. Clone the repo
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone https://github.com/imritik7303/lockr.git
+cd lockr
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2. Install dependencies
+   
+```bash
+bun install
+# or
+npm install
+```
+
+3. Set up environment variables
+   
+Copy the sample file:
+ ```bash
+cp .env.sample .env
+```
+Fill in the required values:
+```bash
+# Core config
+DATABASE_URL="postgresql://..."
+AUTH_SECRET="your-secret-key"
+NEXT_PUBLIC_APP_URL="http://localhost:3000"
+
+# OAuth (example for Google & GitHub)
+GOOGLE_CLIENT_ID="your-google-client-id"
+GOOGLE_CLIENT_SECRET="your-google-client-secret"
+
+GITHUB_CLIENT_ID="your-github-client-id"
+GITHUB_CLIENT_SECRET="your-github-client-secret"
+```
+
+4. Run the dev server
+```bash
+bun dev
+# or
+npm run dev
+```
+
+Visit 👉 http://localhost:3000.
 
 You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
