@@ -1,14 +1,15 @@
 import { DeleteUserButton, PlaceholderDeleteUserButton } from "@/components/delete-user-button";
 import ReturnButton from "@/components/return-button";
 import { auth } from "@/lib/auth";
-import { prisma } from "@/lib/prisma";
+
 
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 
 export default async function DashBoard() {
+    const headerslist =  await headers();
   const session = await auth.api.getSession({
-    headers: await headers(),
+    headers: headerslist,
   });
 
   if (!session) redirect("/auth/login");
@@ -39,11 +40,20 @@ export default async function DashBoard() {
   }
 
   
-  const user = await prisma.user.findMany({
-    orderBy:{
-        name:"asc"
-    }
-  })
+ const {users} = await auth.api.listUsers({
+   headers:headerslist,
+   query:{
+    sortBy:"name",
+   }
+ })
+
+ const sortedUsers = users.sort((a,b) => {
+    if(a.role === "ADMIN" && b.role !== "ADMIN") 
+         return -1
+    if(a.role !== "ADMIN" && b.role === "ADMIN")
+         return 1 ;
+    return 0       
+ })
   return <div className="relative min-h-screen bg-gray-50">
   {/* Background pattern */}
   <div className="absolute inset-0 bg-[url('https://www.toptal.com/designers/subtlepatterns/patterns/diagonal-stripes.png')] opacity-10" />
@@ -79,14 +89,14 @@ export default async function DashBoard() {
           </thead>
 
           <tbody>
-            {user.map((user) => (
+            {sortedUsers.map((user) => (
               <tr key={user.id} className="border-b text-sm text-left">
                 <td className="px-4 py-2">{user.id.slice(0, 8)}</td>
                 <td className="px-4 py-2">{user.name}</td>
                 <td className="px-4 py-2">{user.email}</td>
                 <td className="px-4 py-2 text-center">{user.role}</td>
                 <td className="px-4 py-2 text-center">
-                    {user.role === "ADMIN" || user.id === session.user.id ? <PlaceholderDeleteUserButton/>:<DeleteUserButton userId={user.id}/>  
+                    {user.role === "USER" ? <DeleteUserButton userId={user.id}/>:<PlaceholderDeleteUserButton/>
                     }
                 </td>
               </tr>

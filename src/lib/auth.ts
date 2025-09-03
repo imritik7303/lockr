@@ -5,7 +5,9 @@ import { hashPassword, verifyPassword } from "./argon2";
 import { nextCookies } from "better-auth/next-js";
 import { createAuthMiddleware, APIError } from "better-auth/api";
 import { getValidDomain, normalizeName } from "./utils";
-
+import { UserRole } from "@/generated/prisma";
+import { admin } from "better-auth/plugins";
+import { ac , roles } from "./permission";
 export const auth = betterAuth({
   database: prismaAdapter(prisma, {
     provider: "postgresql",
@@ -52,9 +54,9 @@ export const auth = betterAuth({
         before: async (user) => {
           const AdminEmail= process.env.ADMIN_EMAIL?.split(";") ?? [];
           if(AdminEmail.includes(user.email)){
-            return {data :{...user , role:"ADMIN"}};
+            return {data :{...user , role:UserRole.ADMIN}};
           }
-          return {data:user}
+          return {data:user};
         }
       }
     }
@@ -62,7 +64,7 @@ export const auth = betterAuth({
   user: {
     additionalFields: {
       role: {
-        type: ["USER", "ADMIN"],
+        type: ["USER", "ADMIN"] as Array<UserRole>,
         //do not need to pass role argument in signin email
         input: false,
       },
@@ -78,7 +80,14 @@ export const auth = betterAuth({
       generateId: false,
     },
   },
-  plugins: [nextCookies()],
+  plugins: [nextCookies(),
+    admin({
+      defaultRole:UserRole.USER,
+      adminRoles:[UserRole.ADMIN],
+      ac,
+      roles
+    }),
+  ],
 });
 
 export type ErrorCode = keyof typeof auth.$ERROR_CODES | "UNKNOWN";

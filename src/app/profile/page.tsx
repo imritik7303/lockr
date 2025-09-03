@@ -15,6 +15,15 @@ export default async function Profile() {
   if (!session) {
     redirect("/auth/login");
   }
+
+  const FULL_POST_ACCESS = await auth.api.userHasPermission({
+    body:{
+      userId:session.user.id,
+      permission:{
+        posts:["update" , "delete"]
+      }
+    }
+  })
   return (
     <div
       className="px-8 py-16 container
@@ -34,6 +43,15 @@ export default async function Profile() {
 
           <SignOutButton />
         </div>
+      </div>
+
+        <h2 className="text-2xl font-bold">Permissions</h2>
+
+      <div className="space-x-4">
+        <Button size="sm">MANAGE OWN POSTS</Button>
+        <Button size="sm" disabled={!FULL_POST_ACCESS.success}>
+          MANAGE ALL POSTS
+        </Button>
       </div>
 
       <pre className="text-sm overflow-clip">
