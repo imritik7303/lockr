@@ -31,6 +31,7 @@ export const auth = betterAuth({
       hash: hashPassword,
       verify: verifyPassword,
     },
+    requireEmailVerification:true,
   },
   hooks: {
     before: createAuthMiddleware(async (ctx) => {
