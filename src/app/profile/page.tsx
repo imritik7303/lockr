@@ -9,14 +9,17 @@ import { redirect } from "next/navigation";
 import React from "react";
 
 export default async function Profile() {
+  const headerlist = await headers();
   const session = await auth.api.getSession({
-    headers: await headers(),
+    headers: headerlist
   });
   if (!session) {
     redirect("/auth/login");
   }
 
   const FULL_POST_ACCESS = await auth.api.userHasPermission({
+    // headers:headerlist  or add id in body
+    
     body:{
       userId:session.user.id,
       permission:{

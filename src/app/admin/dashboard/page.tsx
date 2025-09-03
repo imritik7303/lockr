@@ -1,10 +1,13 @@
 import { DeleteUserButton, PlaceholderDeleteUserButton } from "@/components/delete-user-button";
 import ReturnButton from "@/components/return-button";
+import UserRoleSelect from "@/components/user-role-select";
+import { UserRole } from "@/generated/prisma";
 import { auth } from "@/lib/auth";
 
 
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
+import { use } from "react";
 
 export default async function DashBoard() {
     const headerslist =  await headers();
@@ -94,7 +97,10 @@ export default async function DashBoard() {
                 <td className="px-4 py-2">{user.id.slice(0, 8)}</td>
                 <td className="px-4 py-2">{user.name}</td>
                 <td className="px-4 py-2">{user.email}</td>
-                <td className="px-4 py-2 text-center">{user.role}</td>
+                <td className="px-4 py-2 text-center">
+                    <UserRoleSelect userId={user.id}
+                    role={user.role as UserRole } />
+                </td>
                 <td className="px-4 py-2 text-center">
                     {user.role === "USER" ? <DeleteUserButton userId={user.id}/>:<PlaceholderDeleteUserButton/>
                     }
