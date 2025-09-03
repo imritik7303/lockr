@@ -14,39 +14,42 @@ interface UserRoleSelectProps {
 export default function UserRoleSelect({userId , role}:UserRoleSelectProps) {
 
   const [isPending , setIsPending] = useState(false);
+
   const router = useRouter();
+
   async function handleChange (evt:React.ChangeEvent<HTMLSelectElement>){
+
    const newrole = evt.target.value as UserRole;
 
    const canChangeRole = await admin.hasPermission({
     permission :{
-     user:["set-role"]
-    }
-   })
+     user:["set-role"],
+    },
+   });
 
    if (canChangeRole.error){
     return toast.error("Forbidden");
    }
    
-   await admin.setRole({
-    userId,
-    role:newrole,
-    fetchOptions:{
-      onRequest:() =>{
-        setIsPending(true);
+    await admin.setRole({
+      userId,
+      role: newrole,
+      fetchOptions: {
+        onRequest: () => {
+          setIsPending(true);
+        },
+        onResponse: () => {
+          setIsPending(false);
+        },
+        onError: (ctx) => {
+          toast.error(ctx.error.message);
+        },
+        onSuccess: () => {
+          toast.success("User role updated");
+          router.refresh();
+        },
       },
-      onResponse:()=>{
-        setIsPending(false);
-      },
-      onError:(ctx)=>{
-        toast.error(ctx.error.message);
-      },
-      onSuccess:() =>{
-        toast.success("User role updated")
-        router.refresh();
-      }
-    }
-   })
+    });
   }
   return (
      <select

@@ -99,7 +99,8 @@ export default async function DashBoard() {
                 <td className="px-4 py-2">{user.email}</td>
                 <td className="px-4 py-2 text-center">
                     <UserRoleSelect userId={user.id}
-                    role={user.role as UserRole } />
+                    role={user.role as UserRole }
+                     />
                 </td>
                 <td className="px-4 py-2 text-center">
                     {user.role === "USER" ? <DeleteUserButton userId={user.id}/>:<PlaceholderDeleteUserButton/>

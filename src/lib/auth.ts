@@ -7,11 +7,21 @@ import { createAuthMiddleware, APIError } from "better-auth/api";
 import { getValidDomain, normalizeName } from "./utils";
 import { UserRole } from "@/generated/prisma";
 import { admin } from "better-auth/plugins";
-import { ac , roles } from "./permission";
+import { ac, roles } from "./permission";
 export const auth = betterAuth({
   database: prismaAdapter(prisma, {
     provider: "postgresql",
   }),
+  socialProviders: {
+    google: {
+      clientId: String(process.env.GOOGLE_CLIENT_ID),
+      clientSecret: String(process.env.GOOGLE_CLIENT_SECRET),
+    },
+    github: {
+      clientId: String(process.env.GITHUB_CLIENT_ID),
+      clientSecret: String(process.env.GITHUB_CLIENT_SECRET),
+    },
+  },
   emailAndPassword: {
     enabled: true,
     minPasswordLength: 6,
@@ -47,19 +57,19 @@ export const auth = betterAuth({
       }
     }),
   },
-  databaseHooks:{
+  databaseHooks: {
     //before creating user checking if user email is that of an admin if yes then adding role= ADMIN
-    user:{
-      create:{
+    user: {
+      create: {
         before: async (user) => {
-          const AdminEmail= process.env.ADMIN_EMAIL?.split(";") ?? [];
-          if(AdminEmail.includes(user.email)){
-            return {data :{...user , role:UserRole.ADMIN}};
+          const AdminEmail = process.env.ADMIN_EMAIL?.split(";") ?? [];
+          if (AdminEmail.includes(user.email)) {
+            return { data: { ...user, role: UserRole.ADMIN } };
           }
-          return {data:user};
-        }
-      }
-    }
+          return { data: user };
+        },
+      },
+    },
   },
   user: {
     additionalFields: {
@@ -74,18 +84,26 @@ export const auth = betterAuth({
     //expires in 6 hour
     expiresIn: 6 * 60 * 60,
   },
+  account: {
+    accountLinking: {
+      //one email can be used with 1 signup meathod only
+      enabled: false,
+    },
+  },
   advanced: {
     database: {
       //disable the automatically generated id
       generateId: false,
     },
   },
-  plugins: [nextCookies(),
+
+  plugins: [
+    nextCookies(),
     admin({
-      defaultRole:UserRole.USER,
-      adminRoles:[UserRole.ADMIN],
+      defaultRole: UserRole.USER,
+      adminRoles: [UserRole.ADMIN],
       ac,
-      roles
+      roles,
     }),
   ],
 });
