@@ -8,6 +8,7 @@ import { getValidDomain, normalizeName } from "./utils";
 import { UserRole } from "@/generated/prisma";
 import { admin } from "better-auth/plugins";
 import { ac, roles } from "./permission";
+import { sendEmailAction } from "../../actions/send-email.action";
 export const auth = betterAuth({
   database: prismaAdapter(prisma, {
     provider: "postgresql",
@@ -32,6 +33,23 @@ export const auth = betterAuth({
       verify: verifyPassword,
     },
     requireEmailVerification:true,
+  },
+  emailVerification:{
+    sendOnSignUp:true,
+    expiresIn : 60* 60,
+    autoSignInAfterVerification:true,
+    sendVerificationEmail : async({user,url}) => {
+      const link = new URL(url)
+      link.searchParams.set("callbackURL" , "auth/verify")
+     await sendEmailAction({
+      to:user.email,
+      subject:"Verify your email",
+      meta:{
+        description:"please verify your email address to compplte your registration",
+        link:String(url)
+      },
+     })
+    }
   },
   hooks: {
     before: createAuthMiddleware(async (ctx) => {

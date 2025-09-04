@@ -10,7 +10,7 @@ interface SignInOauthButtonProps {
    signUp? :boolean;
 }
 
-export const SignInOauthButton = ({provider, signUp} :SignInOauthButtonProps) =>{
+export const SignInOauthButton = ({provider, signUp} :SignInOauthButtonProps) => {
     const [isPending , setIsPending] = useState(false);
 
     async function handleClick() {

@@ -1,7 +1,7 @@
 "use server";
 
 import transporter from "@/lib/nodemailer";
-import { error } from "console";
+;
 
 const styles = {
   container:
