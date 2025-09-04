@@ -1,6 +1,7 @@
 import ReturnButton from "@/components/return-button";
 import { SignOutButton } from "@/components/sign-out-button";
 import { Button } from "@/components/ui/button";
+import { UpdateUserForm } from "@/components/update-user-form";
 import { auth } from "@/lib/auth";
 
 import { headers } from "next/headers";
@@ -11,7 +12,7 @@ import React from "react";
 export default async function Profile() {
   const headerlist = await headers();
   const session = await auth.api.getSession({
-    headers: headerlist
+    headers: headerlist,
   });
   if (!session) {
     redirect("/auth/login");
@@ -19,14 +20,14 @@ export default async function Profile() {
 
   const FULL_POST_ACCESS = await auth.api.userHasPermission({
     // headers:headerlist  or add id in body
-    
-    body:{
-      userId:session.user.id,
-      permission:{
-        posts:["update" , "delete"]
-      }
-    }
-  })
+
+    body: {
+      userId: session.user.id,
+      permission: {
+        posts: ["update", "delete"],
+      },
+    },
+  });
   return (
     <div
       className="px-8 py-16 container
@@ -48,7 +49,7 @@ export default async function Profile() {
         </div>
       </div>
 
-        <h2 className="text-2xl font-bold">Permissions</h2>
+      <h2 className="text-2xl font-bold">Permissions</h2>
 
       <div className="space-x-4">
         <Button size="sm">MANAGE OWN POSTS</Button>
@@ -57,9 +58,35 @@ export default async function Profile() {
         </Button>
       </div>
 
+      {session.user.image ? (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img
+          src={session.user.image}
+          alt="User Image"
+          className="size-32 border border-primary rounded-md object-cover"
+        />
+      )  : (
+        <div className="size-32 border border-primary rounded-md bg-primary text-primary-foreground flex items-center justify-center">
+          <span className="uppercase text-lg font-bold">
+            {session.user.name.slice(0, 2)}
+          </span>
+        </div>
+      )}
+
       <pre className="text-sm overflow-clip">
         {JSON.stringify(session, null, 2)}
       </pre>
+
+       <div className="space-y-4 p-4 rounded-b-md  border border-t-8 border-blue-600">
+        <h2 className="text-2xl font-bold">Update User</h2>
+        <UpdateUserForm name={session.user.name} image={session.user.image ?? ""} />
+       </div>
+
+        <div className="space-y-4 p-4 rounded-b-md  border border-t-8 border-red-600">
+        <h2 className="text-2xl font-bold">Update Password</h2>
+        
+       </div>
+
     </div>
   );
 }

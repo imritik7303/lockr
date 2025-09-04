@@ -7,7 +7,7 @@ import { toast } from "sonner";
 import { signIn, signUp } from "@/lib/auth-client";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { signInEmailAction } from "../../actions/sign-in-email.action";
+import { signInEmailAction } from "../actions/sign-in-email.action";
 import Link from "next/link";
 
 export const LoginForm = () => {

@@ -8,7 +8,7 @@ import { getValidDomain, normalizeName } from "./utils";
 import { UserRole } from "@/generated/prisma";
 import { admin } from "better-auth/plugins";
 import { ac, roles } from "./permission";
-import { sendEmailAction } from "../../actions/send-email.action";
+import { sendEmailAction } from "../actions/send-email.action";
 export const auth = betterAuth({
   database: prismaAdapter(prisma, {
     provider: "postgresql",

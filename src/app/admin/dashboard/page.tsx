@@ -10,7 +10,7 @@ import { redirect } from "next/navigation";
 import { use } from "react";
 
 export default async function DashBoard() {
-    const headerslist =  await headers();
+  const headerslist =  await headers();
   const session = await auth.api.getSession({
     headers: headerslist,
   });

@@ -7,7 +7,7 @@ import { toast } from "sonner";
 import { signUp } from "@/lib/auth-client";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { signUpEmailAction } from "../../actions/sign-up-email.action";
+import { signUpEmailAction } from "../actions/sign-up-email.action";
 
 export const RegisterForm = () => {
   const [Ispending, setIsPending] = useState(false);
