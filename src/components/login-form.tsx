@@ -8,6 +8,7 @@ import { signIn, signUp } from "@/lib/auth-client";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { signInEmailAction } from "../../actions/sign-in-email.action";
+import Link from "next/link";
 
 export const LoginForm = () => {
 
@@ -40,7 +41,13 @@ export const LoginForm = () => {
       </div>
 
       <div className="space-y-2">
+        <div className="flex justify-between items-center gap-2">
         <Label htmlFor="password">Password</Label>
+        <Link href="/auth/forgot-password"
+        tabIndex={-1} 
+        className="text-sm italic text-muted-foreground hover:text-foreground"
+        >Forgot password?</Link>
+        </div>
         <Input type="password" id="password" name="password" />
       </div>
 

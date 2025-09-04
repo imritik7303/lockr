@@ -36,6 +36,6 @@ export const SignInOauthButton = ({provider, signUp} :SignInOauthButtonProps) =>
     const providerName = provider === "google" ? "Google" : "GitHub";
 
     return <Button onClick={handleClick} disabled={isPending}>
-      Sign{action} with {providerName}
+      Sign{action} with {providerName} 
     </Button>
 }
